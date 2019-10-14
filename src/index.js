@@ -1,16 +1,15 @@
 import { Consumer } from 'sqs-consumer'
 import bunyan from 'bunyan'
 
-
 const logger = bunyan.createLogger({
   name: 'queue-drainer',
   serializers: bunyan.stdSerializers
 })
 
-const queueUrl = process.env.QUEUE || null;
+const queueUrl = process.env.QUEUE || null
 
 if (!queueUrl) {
-  logger.fatal({ queueUrl }, 'no queue url provided, please set QUEUE');
+  logger.fatal({ queueUrl }, 'no queue url provided, please set QUEUE')
   process.exit(1)
 }
 
@@ -30,12 +29,12 @@ const app = Consumer.create({ queueUrl, handleMessage })
 
 app.on('error', (err) => {
   logger.error({ err }, 'generic error')
-  process.exit(1);
+  process.exit(1)
 })
 
 app.on('processing_error', (err) => {
   logger.error({ err }, 'processing error')
-  process.exit(1);
+  process.exit(1)
 })
 
 app.start()
